@@ -54,6 +54,7 @@ type QRProps = {
   fgColor: string,
   style?: ?Object,
   includeMargin: boolean,
+  handleChange?:function,
   imageSettings?: {
     src: string,
     height: number,
@@ -239,8 +240,10 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
       fgColor,
       includeMargin,
       imageSettings,
+      ...notDOMProps
     } = this.props;
 
+    const {handleChange} = notDOMProps;
     // We'll use type===-1 to force QRCode to automatically pick the best type
     const qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
     qrcode.addData(convertStr(value));
@@ -307,7 +310,9 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
           calculatedImageSettings.w,
           calculatedImageSettings.h
         );
+        
       }
+      handleChange && handleChange();
     }
   }
 
@@ -325,6 +330,7 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
       style,
       includeMargin,
       imageSettings,
+      handleChange,
       ...otherProps
     } = this.props;
     const canvasStyle = {height: size, width: size, ...style};
@@ -375,6 +381,7 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
       fgColor,
       includeMargin,
       imageSettings,
+      handleChange,
       ...otherProps
     } = this.props;
 
